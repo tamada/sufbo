@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import com.github.sufbo.stats.entities.Similarity;
@@ -24,14 +25,13 @@ public class HeatmapImageCreator implements AutoCloseable{
     }
 
     public void update(int ignoreIndex, List<Similarity> similarities) throws IOException{
-        int offset = 0;
-        byte[] data = new byte[(similarities.size() + 1) * 3];
+        byte[] data = new byte[dimension.width * 3];
+        Arrays.fill(data, (byte)0xff);
         for(int i = 0; i < similarities.size(); i++){
-            if(i == ignoreIndex) offset = 1;
             int rgb = getRGB(similarities.get(i));
-            data[(i + offset) * 3    ] = (byte)((rgb >>> 16) & 0xff);
-            data[(i + offset) * 3 + 1] = (byte)((rgb >>>  8) & 0xff);
-            data[(i + offset) * 3 + 2] = (byte)((rgb >>>  0) & 0xff);
+            data[(i + ignoreIndex) * 3    ] = (byte)((rgb >>> 16) & 0xff);
+            data[(i + ignoreIndex) * 3 + 1] = (byte)((rgb >>>  8) & 0xff);
+            data[(i + ignoreIndex) * 3 + 2] = (byte)((rgb >>>  0) & 0xff);
         }
         out.write(data);
     }

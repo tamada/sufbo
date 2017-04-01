@@ -40,7 +40,7 @@ public class LeaveOneOut {
         try(BufferedReader in = Files.newBufferedReader(path, Charset.forName("utf-8"))){
             String line;
             for(int index = 0; (line = in.readLine()) != null; index++){
-                if(index == ignoreIndex)
+                if(index < ignoreIndex)
                     continue;
                 perform(item, line, index, list);
             }
@@ -48,13 +48,14 @@ public class LeaveOneOut {
         printList(item, ignoreIndex, list);
         updateHeatMap(ignoreIndex, list);
         long time = System.nanoTime() - start;
-        System.err.printf("%,6d/%,6d (%,f ms)%n", ignoreIndex + 1, list.size(), time / 1000000d);
+        System.err.printf("%,6d/%,6d (%,f ms)%n", ignoreIndex + 1, 
+                          (list.size() + ignoreIndex), time / 1000000d);
         return time;
     }
 
     private void updateHeatMap(int index, List<Similarity> similarities) throws IOException{
         if(creator == null)
-            creator = new HeatmapImageCreator(similarities.size() + 1, similarities.size() + 1);
+            creator = new HeatmapImageCreator(similarities.size(), similarities.size());
         creator.update(index, similarities);
     }
 
