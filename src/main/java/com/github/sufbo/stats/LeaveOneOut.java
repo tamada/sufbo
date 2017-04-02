@@ -1,13 +1,12 @@
 package com.github.sufbo.stats;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.github.sufbo.stats.calculators.SimilarityCalculatorFactory;
 import com.github.sufbo.stats.entities.Item;
@@ -23,34 +22,39 @@ public class LeaveOneOut {
 
     public void run(String file) throws IOException{
         Path path = Paths.get(file);
-        long time = 0l;
-        try(BufferedReader in = Files.newBufferedReader(path, Charset.forName("utf-8"))){
-            String line;
-            for(int index = 0; (line = in.readLine()) != null; index++){
-                time += leaveOne(builder.build(line), path, index);
-            }
+        Index index = new Index();
+        TimeHolder holder = new TimeHolder();
+
+        try(Stream<String> stream = Files.lines(path)){
+            stream.forEach(
+                    string -> holder.append(executeLeaveOne(string, path, index.increment())));
         }
-        System.err.printf("total time: %,f ms%n", time / 1000000d);
+        holder.printf(System.err, "total time: %,f ms%n");
         creator.close();
     }
 
-    private long leaveOne(Item item, Path path, int ignoreIndex) throws IOException{
-        List<Similarity> list = new ArrayList<>();
+    private long executeLeaveOne(String itemString, Path path, int ignoreIndex){
         long start = System.nanoTime();
-        try(BufferedReader in = Files.newBufferedReader(path, Charset.forName("utf-8"))){
-            String line;
-            for(int index = 0; (line = in.readLine()) != null; index++){
-                if(index < ignoreIndex)
-                    continue;
-                perform(item, line, index, list);
-            }
-        }
-        printList(item, ignoreIndex, list);
-        updateHeatMap(ignoreIndex, list);
+        int size = leaveOne(builder.build(itemString), path, ignoreIndex, new ArrayList<>());
         long time = System.nanoTime() - start;
         System.err.printf("%,6d/%,6d (%,f ms)%n", ignoreIndex + 1, 
-                          (list.size() + ignoreIndex), time / 1000000d);
+                size + ignoreIndex, time / 1000000d);
         return time;
+    }
+
+    private int leaveOne(Item item, Path path, int ignoreIndex, List<Similarity> list){
+        try(Stream<String> stream = Files.lines(path)){
+            leaveOneImpl(stream, item, ignoreIndex, list);
+        } catch(IOException e){
+            throw new InternalError(e);
+        }
+        return list.size();
+    }
+
+    private void leaveOneImpl(Stream<String> stream, Item item, int ignoreIndex, List<Similarity> list) throws IOException{
+        stream.skip(ignoreIndex).forEach(line -> perform(item, line, list));
+        printList(item, ignoreIndex, list);
+        updateHeatMap(ignoreIndex, list);
     }
 
     private void updateHeatMap(int index, List<Similarity> similarities) throws IOException{
@@ -69,7 +73,7 @@ public class LeaveOneOut {
         }
     }
 
-    private void perform(Item item, String line, int index, List<Similarity> list){
+    private void perform(Item item, String line, List<Similarity> list){
         Item item2 = builder.build(line);
         list.add(calculator.calculate(item.bytecode(), item2.bytecode()));
     }
