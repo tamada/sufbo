@@ -12,7 +12,7 @@ import com.github.sufbo.entities.java.ClassName;
 import com.github.sufbo.entities.java.Classes;
 import com.github.sufbo.entities.java.ParseFailedClass;
 import com.github.sufbo.entities.visitor.ArtifactVisitor;
-import com.github.sufbo.extractor.ChabudaiClassVisitor;
+import com.github.sufbo.extractor.SufboClassVisitor;
 
 public class Artifact {
     private Ids ids;
@@ -53,7 +53,7 @@ public class Artifact {
     }
 
     private Class parse(ClassReader reader) throws IOException{
-        ChabudaiClassVisitor visitor = new ChabudaiClassVisitor();
+        SufboClassVisitor visitor = new SufboClassVisitor();
         reader.accept(visitor, 0);
         return visitor.buildJavaClass();
     }

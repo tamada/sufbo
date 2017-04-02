@@ -12,10 +12,10 @@ import com.github.sufbo.entities.java.MethodInformation;
 import com.github.sufbo.entities.java.MethodName;
 import com.github.sufbo.entities.java.Methods;
 
-public class ChabudaiClassVisitor extends ClassNameExtractor{
+public class SufboClassVisitor extends ClassNameExtractor{
     private List<Method> methods = new ArrayList<>();
 
-    public ChabudaiClassVisitor() {
+    public SufboClassVisitor() {
     }
 
     @Override
@@ -26,7 +26,7 @@ public class ChabudaiClassVisitor extends ClassNameExtractor{
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodInformation info = new MethodInformation(new MethodName(name), new Descriptor(desc));
-        return new ChabudaiMethodVisitor(super.visitMethod(access, name, desc, signature, exceptions),
+        return new SufboMethodVisitor(super.visitMethod(access, name, desc, signature, exceptions),
                 info, MethodPool.wrap(methods));
     }
 
