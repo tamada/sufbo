@@ -23,6 +23,6 @@ public class BytecodeCountFrequency extends Stats<IOException>{
 
     public static void main(String[] args) throws Throwable{
         BytecodeCountFrequency freq = new BytecodeCountFrequency();
-        freq.run(args[0]);
+        freq.run(args);
     }
 }

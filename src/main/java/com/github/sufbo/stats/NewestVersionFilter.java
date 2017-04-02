@@ -44,6 +44,6 @@ public class NewestVersionFilter extends Stats<IOException>{
 
     public static void main(String[] args) throws Throwable{
         NewestVersionFilter filter = new NewestVersionFilter();
-        filter.run(args[0]);
+        filter.run(args);
     }
 }
