@@ -27,7 +27,7 @@ public class LeaveOneOut {
 
         try(Stream<String> stream = Files.lines(path)){
             stream.forEach(
-                    string -> holder.append(executeLeaveOne(string, path, index.increment())));
+                    string -> holder.append(executeLeaveOne(string, path, index.incrementAfter())));
         }
         holder.printf(System.err, "total time: %,f ms%n");
         creator.close();

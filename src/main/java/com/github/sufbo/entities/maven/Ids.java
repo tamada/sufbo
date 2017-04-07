@@ -10,9 +10,9 @@ import com.github.sufbo.entities.visitor.Visitor;
 public class Ids implements Serializable{
     private static final long serialVersionUID = 2026372107254911573L;
 
-    private GroupId groupId;
-    private ArtifactId artifactId;
-    private Version version;
+    GroupId groupId;
+    ArtifactId artifactId;
+    Version version;
 
     public Ids(GroupId groupId, ArtifactId artifactId, Version version){
         this.groupId = groupId;

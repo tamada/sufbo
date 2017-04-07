@@ -49,10 +49,11 @@ public class ExtractingProcessor implements Processor{
     
     @Override
     public void run() throws IOException{
-        Stream<Artifacts> builders = mapArgsToBuilders(createBuilders());
-        try(PrintWriter out = destination()){
-            CsvResultWriter writer = new CsvResultWriter(out);
-            builders.forEach(artifacts -> artifacts.accept(writer));
+        try(Stream<Artifacts> builders = mapArgsToBuilders(createBuilders())){
+            try(PrintWriter out = destination()){
+                CsvResultWriter writer = new CsvResultWriter(out);
+                builders.forEach(artifacts -> artifacts.accept(writer));
+            }
         }
     }
 

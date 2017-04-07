@@ -26,6 +26,10 @@ public class ByteArray {
         return new ByteArray(digest.digest());
     }
 
+    public KGrams toKGrams(int size){
+        return KGrams.build(size, array);
+    }
+
     public int size(){
         return array.length;
     }

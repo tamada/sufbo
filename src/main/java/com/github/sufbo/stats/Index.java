@@ -8,6 +8,11 @@ class Index {
     }
 
     public int increment(){
+        index++;
+        return index;
+    }
+
+    public int incrementAfter(){
         int current = index;
         index++;
         return current;

@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import com.github.sufbo.entities.ArtifactsBuilder;
 
 public class MavenArtifactsBuilder implements ArtifactsBuilder {
-    private IdBuilder builder = new IdBuilder();
+    private ArtifactBuilder builder = new ArtifactBuilder();
 
     public Artifacts build(Path base){
         if(acceptable(base))
