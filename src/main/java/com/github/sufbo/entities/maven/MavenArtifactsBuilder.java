@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import com.github.sufbo.entities.ArtifactsBuilder;
+import com.github.sufbo.utils.LogHelper;
 
 public class MavenArtifactsBuilder implements ArtifactsBuilder {
     private ArtifactBuilder builder = new ArtifactBuilder();
@@ -21,6 +22,8 @@ public class MavenArtifactsBuilder implements ArtifactsBuilder {
         try {
             return streamImpl(base);
         } catch (IOException e) {
+            e.printStackTrace();
+            LogHelper.warning(getClass(), "artifact build error", e);
             return Stream.empty();
         }
     }

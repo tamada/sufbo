@@ -18,7 +18,15 @@ public class Artifacts {
         artifacts.forEach(visitor::visit);
     }
 
+    public Stream<Artifact> stream(){
+        return artifacts.stream();
+    }
+
     public static Artifacts empty(){
         return new Artifacts(Stream.empty());
+    }
+
+    public String toString(){
+        return String.format("%s(%d)", super.toString(), artifacts.size());
     }
 }

@@ -18,6 +18,7 @@ import com.github.sufbo.Options;
 import com.github.sufbo.Processor;
 import com.github.sufbo.entities.ArtifactsBuilder;
 import com.github.sufbo.entities.SimpleArtifactsBuilder;
+import com.github.sufbo.entities.SpecifiedListArtifactsBuilder;
 import com.github.sufbo.entities.maven.ArtifactId;
 import com.github.sufbo.entities.maven.Artifacts;
 import com.github.sufbo.entities.maven.GroupId;
@@ -65,7 +66,8 @@ public class ExtractingProcessor implements Processor{
 
     private List<ArtifactsBuilder> createBuilders(){
         Optional<Ids> ids = buildIds(options);
-        return Arrays.asList(new MavenArtifactsBuilder(), new SimpleArtifactsBuilder(ids));
+        return Arrays.asList(new MavenArtifactsBuilder(), new SpecifiedListArtifactsBuilder(),
+                new SimpleArtifactsBuilder(ids));
     }
 
     private Artifacts create(List<ArtifactsBuilder> list, Path path){

@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import com.github.sufbo.entities.visitor.Visitor;
 
-public class Ids implements Serializable{
+public class Ids implements Serializable, Comparable<Ids>{
     private static final long serialVersionUID = 2026372107254911573L;
 
     GroupId groupId;
@@ -18,6 +18,20 @@ public class Ids implements Serializable{
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
+    }
+
+    public int compareTo(Ids other){
+        if(sameArtifact(other)){
+            return new VersionComparator().compare(version, other.version);
+        }
+        return compareIds(other.groupId, other.artifactId);
+    }
+
+    private int compareIds(GroupId otherGroupId, ArtifactId otherArtifactId){
+        int v1 = groupId.toString().compareTo(otherGroupId.toString());
+        if(v1 != 0)
+            return v1;
+        return artifactId.toString().compareTo(otherArtifactId.toString());
     }
 
     public boolean sameArtifact(Ids other){

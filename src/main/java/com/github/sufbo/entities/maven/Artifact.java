@@ -31,6 +31,14 @@ public class Artifact {
         }
     }
 
+    public Path path(){
+        return path;
+    }
+
+    public boolean isSameArtifact(Artifact other){
+        return ids().sameArtifact(other.ids());
+    }
+
     public Ids ids(){
         return ids;
     }
