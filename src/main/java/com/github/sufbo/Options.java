@@ -40,6 +40,12 @@ public class Options {
             action.accept(optionalValue(key));
     }
 
+    public String valueOrElse(Key key, String defaultValue){
+        if(has(key))
+            return value(key);
+        return defaultValue;
+    }
+
     public Optional<String> optionalValue(Key key){
         if(key.hasArgument())
             return Optional.of(options.get(key));

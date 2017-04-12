@@ -23,29 +23,49 @@ public class LeaveOneOut {
     public static final Key PARALLEL = new Key("-p", "--parallel", false);
     public static final Key OUTPUT_RESULT = new Key("-o", "--output-result", false);
     public static final Key OUTPUT_HEATMAP = new Key("-H", "--heatmap", false);
+    public static final Key ALGORITHM = new Key("-a", "--algorithm", true);
 
     private ItemBuilder builder = new ItemBuilder();
     private SimilarityCalculator calculator = new SimilarityCalculatorFactory()
-            .calculatorOrDefault("levenshtein");
+            .calculatorOrDefault("jaccard_index");
     private SimpleItemStringifier stringifier = new SimpleItemStringifier();
     private HeatmapImageCreator creator = new HeatmapImageCreator();
     private Arguments arguments;
     private Options options;
 
     public LeaveOneOut(String[] args){
-        OptionsArgumentsBuilder optionArguments = OptionsArgumentsBuilder.builder(Arrays.asList(PARALLEL, OUTPUT_RESULT, OUTPUT_HEATMAP), args);
+        OptionsArgumentsBuilder optionArguments = OptionsArgumentsBuilder.builder(availableOptions(), args);
         arguments = optionArguments.arguments();
         options = optionArguments.options();
+        calculator = new SimilarityCalculatorFactory().calculatorOrDefault(options.valueOrElse(ALGORITHM, "levenshtein"));
+    }
+
+    protected List<Key> availableOptions(){
+        return Arrays.asList(PARALLEL, OUTPUT_RESULT, OUTPUT_HEATMAP, Key.HELP, ALGORITHM);
     }
 
     public void run() throws IOException{
-        arguments.forEach(file -> { 
-            try{
-                execute(file);
-            } catch(IOException e){
-                throw new InternalError(e);
-            }
-        });
+        if(options.has(Key.HELP))
+            printHelp();
+        else
+            arguments.forEach(file -> { 
+                try{
+                    execute(file);
+                } catch(IOException e){
+                    throw new InternalError(e);
+                }
+            });
+    }
+
+    private void printHelp(){
+        System.out.println("java com.github.sufbo.stats.LeaveOneOut [OPTIONS] <FILES...>");
+        System.out.println("OPTIONS");
+        System.out.println("  -p, --parallel:              execute parallel.");
+        System.out.println("  -o, --output-result:         output comparing result.  if this option is not specified,");
+        System.out.println("                               this program do not output the comparison result.");
+        System.out.println("  -H, --heatmap:               output heatmap image in heatmap.ppm.");
+        System.out.println("  -a, --algorithm <ALGORITHM>: specify the comparison algorithm.  default is levenshtein.");
+        System.out.println("  -h, --help:                  print this message and exit.");
     }
 
     public void execute(String file) throws IOException{
@@ -73,14 +93,14 @@ public class LeaveOneOut {
     private int leaveOne(Item item, Path path, int ignoreIndex){
         try(Stream<String> stream = Files.lines(path)){
             if(options.has(PARALLEL))
-                return leaveOneImpl(stream.parallel(), item, ignoreIndex);
-            return leaveOneImpl(stream, item, ignoreIndex);
+                return leaveOneImpl(item, stream.parallel(), ignoreIndex);
+            return leaveOneImpl(item, stream, ignoreIndex);
         } catch(IOException e){
             throw new InternalError(e);
         }
     }
 
-    private int leaveOneImpl(Stream<String> stream, Item item, int ignoreIndex) throws IOException{
+    private int leaveOneImpl(Item item, Stream<String> stream, int ignoreIndex) throws IOException{
         List<Similarity> list = compareThem(stream, item.bytecode(), ignoreIndex);
         options.ifKeyPresent(OUTPUT_RESULT,  value -> printList(item, ignoreIndex, list));
         options.ifKeyPresent(OUTPUT_HEATMAP, value -> updateHeatMap(ignoreIndex, list));

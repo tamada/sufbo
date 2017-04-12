@@ -11,6 +11,8 @@ public class SimilarityCalculatorFactory {
 
     public SimilarityCalculatorFactory(){
         register(new LevenshteinCalculator());
+        register(new JaccardIndexSimilarityCalculator());
+        register(new CosineSimilarityCalculator());
     }
 
     public Optional<SimilarityCalculator> calculator(String algorithm){
