@@ -14,11 +14,22 @@ public class HeatmapImageCreator implements AutoCloseable{
     private BufferedOutputStream out;
     private Dimension dimension;
 
+    public HeatmapImageCreator(){
+    }
+
     public HeatmapImageCreator(int width, int height) throws IOException{
-        this(width, height, "heatmap.ppm");
+        constructImage(width, height);
     }
 
     public HeatmapImageCreator(int width, int height, String fileName) throws IOException{
+        constructImage(width, height, fileName);
+    }
+
+    public void constructImage(int width, int height) throws IOException{
+        constructImage(width, height, "heatmap.ppm");
+    }
+
+    public void constructImage(int width, int height, String fileName) throws IOException{
         this.dimension = new Dimension(width, height);
         this.out = new BufferedOutputStream(new FileOutputStream(fileName));
         writeHeader();
@@ -50,6 +61,7 @@ public class HeatmapImageCreator implements AutoCloseable{
 
     @Override
     public void close() throws IOException {
-        out.close();
+        if(out != null)
+            out.close();
     }
 }

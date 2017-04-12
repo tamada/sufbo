@@ -1,6 +1,8 @@
 package com.github.sufbo.stats.entities;
 
 public class Similarity {
+    public static final Similarity ONE = new Similarity(1.0);
+
     private double similarity;
 
     public Similarity(double value){

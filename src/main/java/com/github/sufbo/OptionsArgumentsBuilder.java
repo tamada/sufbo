@@ -16,7 +16,7 @@ public class OptionsArgumentsBuilder {
     }
 
     private OptionsArgumentsBuilder(List<Key> keys, String[] args){
-        for(int i = 1; i < args.length; i++){
+        for(int i = 0; i < args.length; i++){
             final String current = args[i];
             Optional<Key> key = findAndPutOption(keys.stream(), current, i, args);
             ifNotPresent(key, () -> arguments.add(current));
@@ -55,9 +55,5 @@ public class OptionsArgumentsBuilder {
             return;
         }
         options.put(key, "true");
-    }
-
-    public static OptionsArgumentsBuilder build(List<Key> keys, String[] args){
-        return new OptionsArgumentsBuilder(keys, args);
     }
 }

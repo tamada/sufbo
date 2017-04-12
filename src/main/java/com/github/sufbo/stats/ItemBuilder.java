@@ -1,7 +1,6 @@
 package com.github.sufbo.stats;
 
 import com.github.sufbo.entities.ByteArray;
-import com.github.sufbo.entities.java.Bytecode;
 import com.github.sufbo.entities.java.ClassName;
 import com.github.sufbo.entities.java.Descriptor;
 import com.github.sufbo.entities.java.MethodInformation;
@@ -19,10 +18,18 @@ public class ItemBuilder {
         return new Item(buildIds(items[0], items[1], items[2]), buildItemInfo(items));
     }
 
-    private ItemInfo buildItemInfo(String[] items){
+    public ByteArray buildArray(String line){
+        return buildArray(line.split(","));
+    }
+
+    private ByteArray buildArray(String[] items){
         String bytecode = items.length > 8? items[8]: "";
+        return ByteArray.parse(bytecode);
+    }
+
+    private ItemInfo buildItemInfo(String[] items){
         MethodInformation method = buildMethodInformation(items[4], items[5]);
-        return new ItemInfo(new ClassName(items[3]), method, new Bytecode(ByteArray.parse(bytecode)));
+        return new ItemInfo(new ClassName(items[3]), method, buildArray(items));
     }
 
     private MethodInformation buildMethodInformation(String methodName, String descriptor){

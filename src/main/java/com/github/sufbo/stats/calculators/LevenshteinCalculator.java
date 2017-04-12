@@ -42,7 +42,10 @@ public class LevenshteinCalculator extends AbstractSimilarityCalculator {
 
     private Similarity createSimilarity(int[][] table, int length1, int length2){
         int finalCost = table[length1][length2];
-        return new Similarity(1 - 1.0 * finalCost / Math.max(length1, length2));
+        int length = Math.max(length1, length2);
+        if(length == 0)
+            return Similarity.ONE;
+        return new Similarity(1 - 1.0 * finalCost / length);
     }
 
     private int[][] initializeTable(int[][] table){

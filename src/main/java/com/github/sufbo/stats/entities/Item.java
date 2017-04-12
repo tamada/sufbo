@@ -1,6 +1,6 @@
 package com.github.sufbo.stats.entities;
 
-import com.github.sufbo.entities.java.Bytecode;
+import com.github.sufbo.entities.ByteArray;
 import com.github.sufbo.entities.maven.Ids;
 import com.github.sufbo.stats.entities.visitor.ItemVisitor;
 
@@ -25,7 +25,7 @@ public class Item {
         return ids.isDifferentVersion(other.ids);
     }
 
-    public Bytecode bytecode(){
+    public ByteArray bytecode(){
         return info.bytecode();
     }
 

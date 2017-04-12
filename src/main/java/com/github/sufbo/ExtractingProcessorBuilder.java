@@ -10,7 +10,7 @@ public class ExtractingProcessorBuilder extends ProcessorBuilder {
     @Override
     public Processor construct(String[] args) {
         OptionsArgumentsBuilder builder = OptionsArgumentsBuilder
-                .build(Arrays.asList(availableOptions()), args);
+                .builder(Arrays.asList(availableOptions()), args);
         return new ExtractingProcessor(builder.arguments(), builder.options());
     }
 

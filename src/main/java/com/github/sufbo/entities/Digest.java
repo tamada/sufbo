@@ -7,20 +7,27 @@ import java.util.Optional;
 import com.github.sufbo.entities.java.Bytecode;
 
 public class Digest {
-    private Optional<ByteArray> buffer;
+    private Optional<ByteArray> digest = Optional.empty();
+    private Bytecode digestFrom;
 
     public Digest(Bytecode buffer){
-        this.buffer = digest(buffer.buffer());
+        digestFrom = buffer;
     }
 
-    public Optional<ByteArray> digest(ByteArray source){
+    public Optional<ByteArray> digest(){
+        if(!digest.isPresent())
+            digest = digestImpl(digestFrom.buffer());
+        return digest;
+    }
+
+    private Optional<ByteArray> digestImpl(ByteArray source){
         Optional<MessageDigest> digest = algorithm("MD5");
         return digest.map(algorithm -> source.digest(algorithm));
     }
 
     @Override
     public String toString(){
-        return buffer
+        return digest
                 .map(bytes -> bytes.toString())
                 .orElse("");
     }

@@ -2,19 +2,19 @@ package com.github.sufbo;
 
 import java.util.Objects;
 
-public enum Key {
-    ARTIFACT_ID("-a", "--artifactId", true),
-    GROUP_ID("-g", "--groupId", true),
-    VERSION("-v", "--version", true),
-    DEST("-d", "--dest", true),
-    HELP("-h", "--help", false),
-    NULL("", "", false);
+public class Key {
+    public static final Key ARTIFACT_ID = new Key("-a", "--artifactId", true);
+    public static final Key GROUP_ID = new Key("-g", "--groupId", true);
+    public static final Key VERSION = new Key("-v", "--version", true);
+    public static final Key DEST = new Key("-d", "--dest", true);
+    public static final Key HELP = new Key("-h", "--help", false);
+    public static final Key NULL = new Key("", "", false);
 
     private String option;
     private String alias;
     private boolean hasArgument;
 
-    private Key(String option, String alias, boolean hasArgument){
+    public Key(String option, String alias, boolean hasArgument){
         this.option = option;
         this.alias = alias;
         this.hasArgument = hasArgument;
