@@ -2,8 +2,8 @@ package com.github.sufbo.stats.calculators;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.IntStream;
 
-import com.github.sufbo.entities.ByteArray;
 import com.github.sufbo.stats.entities.Similarity;
 
 public class CosineSimilarityCalculator extends AbstractSimilarityCalculator {
@@ -12,15 +12,15 @@ public class CosineSimilarityCalculator extends AbstractSimilarityCalculator {
     }
 
     @Override
-    public Similarity calculate(ByteArray array1, ByteArray array2) {
-        Map<Integer, Integer> freq1 = frequency(array1.stream());
-        Map<Integer, Integer> freq2 = frequency(array2.stream());
+    public Similarity calculate(IntStream stream1, IntStream stream2){
+        Map<Integer, Integer> freq1 = frequency(stream1);
+        Map<Integer, Integer> freq2 = frequency(stream2);
         return calculate(freq1, freq2);
     }
 
     private Similarity calculate(Map<Integer, Integer> freq1, Map<Integer, Integer> freq2){
         Set<Integer> keys = mergeKey(freq1, freq2);
-        return new Similarity(innerProduct(keys, freq1, freq2) / (norm(freq1) * norm(freq2)));
+        return new Similarity(innerProduct(keys, freq1, freq2), (norm(freq1) * norm(freq2)));
     }
 
     private int innerProduct(Set<Integer> keys, Map<Integer, Integer> freq1, Map<Integer, Integer> freq2){

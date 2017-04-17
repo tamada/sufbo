@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     compile 'org.ow2.asm:asm:5.1'
+    compile 'org.mongodb:mongo-java-driver:3.4.2'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-all:1.3'

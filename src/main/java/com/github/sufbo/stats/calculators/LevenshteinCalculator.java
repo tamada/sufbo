@@ -1,6 +1,7 @@
 package com.github.sufbo.stats.calculators;
 
-import com.github.sufbo.entities.ByteArray;
+import java.util.stream.IntStream;
+
 import com.github.sufbo.stats.entities.Similarity;
 
 public class LevenshteinCalculator extends AbstractSimilarityCalculator {
@@ -9,8 +10,8 @@ public class LevenshteinCalculator extends AbstractSimilarityCalculator {
     }
 
     @Override
-    public Similarity calculate(ByteArray array1, ByteArray array2) {
-        return calculate(array1.stream().toArray(), array2.stream().toArray());
+    public Similarity calculate(IntStream stream1, IntStream stream2){
+        return calculate(stream1.toArray(), stream2.toArray());
     }
 
     private Similarity calculate(int[] array1, int[] array2){
@@ -45,7 +46,7 @@ public class LevenshteinCalculator extends AbstractSimilarityCalculator {
         int length = Math.max(length1, length2);
         if(length == 0)
             return Similarity.ONE;
-        return new Similarity(1 - 1.0 * finalCost / length);
+        return new Similarity(1 - (1.0 * finalCost / length));
     }
 
     private int[][] initializeTable(int[][] table){

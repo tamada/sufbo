@@ -10,6 +10,15 @@ public class Timer {
         }
     }
 
+    public static void execute(Runnable runnable){
+        long start = System.nanoTime();
+        try{
+            runnable.run();
+        } finally{
+            printTime(start, System.nanoTime());
+        }
+    }
+
     private static void printTime(long start, long end){
         long time = end - start;
         System.err.printf("%,f ms%n", time / 1000000d);

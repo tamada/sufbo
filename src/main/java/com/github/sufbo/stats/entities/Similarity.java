@@ -5,6 +5,12 @@ public class Similarity {
 
     private double similarity;
 
+    public Similarity(double numerator, double denominator){
+        this(numerator / denominator);
+        if(Math.abs(denominator) < 1E-8 && Math.abs(numerator) < 1E-8)
+            similarity = 1d;
+    }
+
     public Similarity(double value){
         this.similarity = value;
     }

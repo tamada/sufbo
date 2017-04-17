@@ -21,6 +21,10 @@ public class KGrams {
         return kgrams.stream();
     }
 
+    public IntStream intStream(){
+        return stream().mapToInt(kgram -> kgram.toInt());
+    }
+
     public static KGrams build(int size, byte[] array){
         return new KGrams(size, array);
     }

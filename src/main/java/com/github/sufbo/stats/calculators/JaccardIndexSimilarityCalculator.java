@@ -1,8 +1,8 @@
 package com.github.sufbo.stats.calculators;
 
 import java.util.Map;
+import java.util.stream.IntStream;
 
-import com.github.sufbo.entities.ByteArray;
 import com.github.sufbo.stats.entities.Similarity;
 
 public class JaccardIndexSimilarityCalculator extends AbstractSimilarityCalculator {
@@ -11,16 +11,16 @@ public class JaccardIndexSimilarityCalculator extends AbstractSimilarityCalculat
     }
 
     @Override
-    public Similarity calculate(ByteArray array1, ByteArray array2) {
-        Map<Integer, Integer> freq1 = frequency(array1.stream());
-        Map<Integer, Integer> freq2 = frequency(array2.stream());
+    public Similarity calculate(IntStream stream1, IntStream stream2){
+        Map<Integer, Integer> freq1 = frequency(stream1);
+        Map<Integer, Integer> freq2 = frequency(stream2);
         return calculate(freq1, freq2);
     }
 
     private Similarity calculate(Map<Integer, Integer> freq1, Map<Integer, Integer> freq2){
         long unionSize = unionSize(freq1, freq1);
         long intersectSize = intersectSize(freq1, freq2);
-        return new Similarity(1.0 * intersectSize / unionSize);
+        return new Similarity(1.0 * intersectSize, unionSize);
     }
 
     private long unionSize(Map<Integer, Integer> freq1, Map<Integer, Integer> freq2){

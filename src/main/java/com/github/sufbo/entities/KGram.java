@@ -10,6 +10,13 @@ public class KGram {
         System.arraycopy(data, from, kgram, 0, kgram.length);
     }
 
+    public int toInt(){
+        int value = 0;
+        for(int i = kgram.length - 1; i >= 0; i--)
+            value = (value << 8) | kgram[i];
+        return value;
+    }
+
     public int size(){
         return kgram.length;
     }

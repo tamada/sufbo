@@ -7,7 +7,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.github.sufbo.entities.ByteArray;
 import com.github.sufbo.stats.SimilarityCalculator;
 import com.github.sufbo.stats.entities.Similarity;
 
@@ -22,7 +21,7 @@ public abstract class AbstractSimilarityCalculator implements SimilarityCalculat
         return algorithm;
     }
 
-    public abstract Similarity calculate(ByteArray array1, ByteArray array2);
+    public abstract Similarity calculate(IntStream stream1, IntStream stream2);
 
     protected Set<Integer> mergeKey(Map<Integer, Integer> freq1, Map<Integer, Integer> freq2){
         Set<Integer> set = new HashSet<>(freq1.keySet());
