@@ -1,6 +1,7 @@
 package com.github.sufbo.entities.maven;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
 public class Version extends Id implements Comparable<Version> {
     private static final long serialVersionUID = 5088258399769333629L;
@@ -14,6 +15,17 @@ public class Version extends Id implements Comparable<Version> {
     public Version(String id){
         super(id);
         versions = id.split("\\.-");
+    }
+
+    @Override
+    public boolean equals(Object other){
+        return other instanceof Version
+                && super.equals(other);
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hashCode(versions);
     }
 
     @Override

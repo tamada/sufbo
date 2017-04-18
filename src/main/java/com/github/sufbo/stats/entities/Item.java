@@ -1,6 +1,7 @@
 package com.github.sufbo.stats.entities;
 
 import com.github.sufbo.entities.ByteArray;
+import com.github.sufbo.entities.java.MethodInformation;
 import com.github.sufbo.entities.maven.Ids;
 import com.github.sufbo.stats.entities.visitor.ItemVisitor;
 
@@ -31,6 +32,10 @@ public class Item {
 
     public int bytecodeLength(){
         return info.bytecodeLength();
+    }
+
+    public MethodInformation method(){
+        return info.method();
     }
 
     public void accept(ItemVisitor visitor){

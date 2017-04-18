@@ -21,6 +21,10 @@ public class ItemInfo {
         return bytecode;
     }
 
+    public MethodInformation method(){
+        return method;
+    }
+
     public int bytecodeLength(){
         return bytecode.size();
     }

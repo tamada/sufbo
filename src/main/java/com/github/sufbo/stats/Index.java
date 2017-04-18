@@ -1,6 +1,6 @@
 package com.github.sufbo.stats;
 
-class Index {
+public class Index {
     private int index;
 
     public Index(){

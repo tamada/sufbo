@@ -9,12 +9,12 @@ import com.github.sufbo.entities.java.MethodInformation;
 import com.github.sufbo.entities.maven.ArtifactId;
 import com.github.sufbo.entities.maven.GroupId;
 import com.github.sufbo.entities.maven.Version;
-import com.github.sufbo.stats.entities.visitor.ItemVisitor;
 
-public class DocumentConverter implements ItemVisitor {
+public class MongoItemConverter implements ItemConverter<Document> {
     private Document document = new Document();
 
-    public Document toDocument(){
+    @Override
+    public Document build(){
         return document;
     }
 
