@@ -16,7 +16,7 @@ import com.github.sufbo.entities.maven.Ids;
 import com.github.sufbo.entities.maven.Version;
 import com.github.sufbo.stats.Index;
 
-public class SqlExecuteConverter implements ItemConverter<Boolean> {
+public class H2StoringConverter implements ItemConverter<Boolean> {
     private Connection connection;
     private Ids lastIds;
     private String lastClassName;
@@ -25,7 +25,7 @@ public class SqlExecuteConverter implements ItemConverter<Boolean> {
     private Index methodRef = new Index();
     private boolean success = true;
 
-    public SqlExecuteConverter(Connection connection){
+    public H2StoringConverter(Connection connection){
         this.connection = connection;
     }
 

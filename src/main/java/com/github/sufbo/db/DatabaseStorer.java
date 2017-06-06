@@ -8,20 +8,16 @@ import java.util.stream.Stream;
 import com.github.sufbo.stats.ItemBuilder;
 import com.github.sufbo.stats.entities.Item;
 
-public abstract class DatabaseStorer extends DBAccessor {
+public interface DatabaseStorer{
     public static final String COLLECTION_NAME = "opcodes";
 
-    public DatabaseStorer(String host){
-        super(host);
-    }
-
-    public void run(Path path) throws IOException{
+    default void run(Path path) throws IOException{
         try(Stream<String> stream = Files.lines(path)){
             store(stream);
         }
     }
 
-    private void store(Stream<String> stream){
+    default void store(Stream<String> stream){
         ItemBuilder builder = new ItemBuilder();
         stream.map(line -> builder.build(line))
         .forEach(this::store);
@@ -29,5 +25,5 @@ public abstract class DatabaseStorer extends DBAccessor {
         // .ifPresent(item -> System.out.printf("%s (%d)%n", item, item.method().descriptor().toString().length()));
     }
 
-    protected abstract void store(Item item);
+    void store(Item item);
 }

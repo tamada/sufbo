@@ -2,18 +2,14 @@ package com.github.sufbo.db;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
-import org.h2.jdbcx.JdbcDataSource;
 
 import com.github.sufbo.stats.entities.Item;
 import com.github.sufbo.utils.LogHelper;
 import com.github.sufbo.utils.Timer;
 
-public class H2DataStorer extends DatabaseStorer{
-    private Connection connection;
+public class H2DataStorer extends H2DataAccessor implements DatabaseStorer{
     private int count;
     private long time;
     private double total = 0d;
@@ -23,7 +19,8 @@ public class H2DataStorer extends DatabaseStorer{
         super(host);
     }
 
-    protected void store(Item item){
+    @Override
+    public void store(Item item){
         converter.convert(item);
         count++;
         if(count % 10000 == 0)
@@ -32,7 +29,7 @@ public class H2DataStorer extends DatabaseStorer{
 
     private void peek(){
         try{
-            connection.commit();
+            connection().commit();
             printLog();
         } catch(SQLException e){
             e.printStackTrace();
@@ -49,24 +46,11 @@ public class H2DataStorer extends DatabaseStorer{
     }
 
     @Override
-    public void open(String uri) {
-        JdbcDataSource source = new JdbcDataSource();
-        source.setURL(uri);
-        source.setUser("sa");
-        source.setPassword("");
-        try{
-            this.connection = source.getConnection();
-        } catch(SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public void prepare() {
         try{
             createTables();
-            connection.setAutoCommit(false);
-            converter = new SqlExecuteConverter(connection);            
+            connection().setAutoCommit(false);
+            converter = new H2StoringConverter(connection());            
         } catch(SQLException e){
             e.printStackTrace();
         }
@@ -81,16 +65,8 @@ public class H2DataStorer extends DatabaseStorer{
     }
 
     private void execute(String sql) throws SQLException{
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.executeUpdate();
-    }
-
-    @Override
-    public void close() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        try(PreparedStatement statement = statement(sql)){
+            statement.executeUpdate();
         }
     }
 
@@ -98,7 +74,7 @@ public class H2DataStorer extends DatabaseStorer{
         // try(DatabaseStorer store = new H2DataStorer("jdbc:h2:tcp://localhost/~/test")){
         //     store.run(Paths.get(args[0]));
         // }
-        try(DatabaseStorer store = new H2DataStorer("jdbc:h2:/Volumes/maven2/h2")){
+        try(H2DataStorer store = new H2DataStorer("jdbc:h2:/Volumes/maven2/h2")){
             Timer.perform(() -> store.run(Paths.get(args[0])));
         }
     }
