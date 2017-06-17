@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'findbugs'
 apply plugin: 'jacoco'
+apply plugin: 'eclipse'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -16,7 +17,6 @@ dependencies {
     compile 'org.mongodb:mongo-java-driver:3.4.2'
     // https://mvnrepository.com/artifact/com.h2database/h2
     compile 'com.h2database:h2:1.4.194'
-
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-all:1.3'
