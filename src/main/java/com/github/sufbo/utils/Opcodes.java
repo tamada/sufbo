@@ -42,6 +42,7 @@ public class Opcodes {
     }
 
     private Opcode buildOpcode(String[] items){
-        return new Opcode(Integer.parseInt(items[0]), items[1]);
+        String type = items.length == 5? items[4]: "";
+        return new Opcode(Integer.parseInt(items[0]), items[1], type);
     }
 }
