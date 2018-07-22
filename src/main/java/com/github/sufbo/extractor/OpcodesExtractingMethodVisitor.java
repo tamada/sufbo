@@ -11,13 +11,14 @@ import com.github.sufbo.entities.java.Bytecode;
 import com.github.sufbo.entities.java.Method;
 import com.github.sufbo.entities.java.MethodInformation;
 
-class OpcodesExtractingMethodVisitor extends MethodVisitor {
+class OpcodesExtractingMethodVisitor extends SufboParentMethodVisitor {
     private ByteArrayOutputStream out = new ByteArrayOutputStream();
 
     public OpcodesExtractingMethodVisitor(MethodVisitor visitor){
-        super(Opcodes.ASM5, visitor);
+        super(visitor);
     }
 
+    @Override
     public Method build(MethodInformation info){
         Bytecode bytecode = new Bytecode(out.toByteArray());
         return new Method(info, bytecode);
