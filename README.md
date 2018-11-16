@@ -13,15 +13,9 @@ This component extracts method information from given Java packages, and store t
 
 #### Stored information
 
-* Group Id
-    * Artifact Id
-        * Version
-            * Class name
-                * Method name
-                * signature
-                * \# of opcode sequence
-                * sha256 hash of opcode sequence
-                * opcode sequence
+The form of extracted.csv is as follows.
+
+`Group Id,Artifact Id,Version,Class Name,Method Name,signature,visibility of the method,\#of opcode sequence,opcode sequence`
 
 ### Search
 
@@ -34,7 +28,7 @@ This component searches method names based on its information from above storage
 
 #### extract.sh
 
-次の３種類からメソッドごとに上記の[Stored information](#stored_information)を取り出し，
+次の３種類からメソッドごとに上記の[Stored information](#stored-information)を取り出し，
 csv形式（extracted.csv形式）で出力する．
 
 * Maven repository
@@ -49,6 +43,9 @@ csv形式（extracted.csv形式）で出力する．
 * 特定のjarファイル（絶対パス，相対パス）
     * 特定の jar ファイルを対象とする．ただし，別途オプションで artifactId, groupId, version を指定する必要がある．
         * ```extract.sh hoge.jar -a ARTIFACT_ID -g GROUP_ID -v VERSION```
+
+なお，出力される opcode は似た意味の命令がまとめられて出力される．
+どのようにまとめられるかは，`src/main/resources/resources/bytecode.def`を参照のこと．
 
 #### newest.sh
 

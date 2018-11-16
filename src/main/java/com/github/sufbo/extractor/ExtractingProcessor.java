@@ -47,7 +47,7 @@ public class ExtractingProcessor implements Processor{
         return Files
                 .newBufferedWriter(path, options.charset());
     }
-    
+
     @Override
     public void run() throws IOException{
         try(Stream<Artifacts> builders = mapArgsToBuilders(createBuilders())){
