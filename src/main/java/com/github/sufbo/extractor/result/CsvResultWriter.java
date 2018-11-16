@@ -2,6 +2,7 @@ package com.github.sufbo.extractor.result;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import com.github.sufbo.entities.java.Bytecode;
 import com.github.sufbo.entities.java.ClassName;
@@ -27,24 +28,13 @@ public class CsvResultWriter implements ArtifactVisitor{
 
     @Override
     public void visit(ClassName name, MethodInformation method, Bytecode bytecode) {
-        print(ids, name, method);
-        print(bytecode.length());
-        printBytecode(bytecode);
+        print(ids, name, method, bytecode.length(), bytecode);
         out.println();
     }
 
-    private void printBytecode(Bytecode bytecode){
-        print(bytecode.digest());
-        out.print(bytecode);
-    }
-
     private void print(Object... objects){
-        Arrays.stream(objects)
-        .forEach(object -> print(String.valueOf(object)));
-    }
-
-    private void print(String value){
-        out.print(value);
-        out.print(",");
+        out.print(Arrays.stream(objects)
+                .map(item -> String.valueOf(item))
+                .collect(Collectors.joining(",")));
     }
 }
